@@ -10,6 +10,11 @@ import android.os.SystemClock;
 import android.os.Trace;
 import android.util.Log;
 
+import com.timmy.lib_startup.ApmUtil;
+import com.timmy.lib_startup.DrawSpeedView;
+import com.timmy.lib_startup.StartupSdk;
+import com.timmy.lib_startup.TLog;
+
 /**
  * Android启动优化项目
  */
@@ -17,9 +22,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StartupSdk.getInstance().onPageCreate(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.d("APP", "MainActivity onCreate:" + SystemClock.elapsedRealtime());
+        long startTime = SystemClock.elapsedRealtime();
+        TLog.d("MainActivity onCreate before: " + startTime);
+//        setContentView(R.layout.activity_main);
+        setContentView(DrawSpeedView.wrap(this, ApmUtil.getPageKey(this), R.layout.activity_main));
+        TLog.d("MainActivity onCreate after: " + SystemClock.elapsedRealtime());
+        TLog.d("MainActivity onCreate diff: " + (SystemClock.elapsedRealtime() - startTime));
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override

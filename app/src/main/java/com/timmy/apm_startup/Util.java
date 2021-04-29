@@ -1,6 +1,7 @@
 package com.timmy.apm_startup;
 
-import android.util.Log;
+
+import com.timmy.lib_startup.TLog;
 
 public class Util {
 
@@ -8,6 +9,6 @@ public class Util {
         int a = 1;
         int b = 2;
         int c = a + b;
-        Log.d("APM", "test : " + c);
+        TLog.d( "test : " + c);
     }
 }
