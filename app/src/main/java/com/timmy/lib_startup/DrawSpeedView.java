@@ -32,6 +32,6 @@ public class DrawSpeedView extends FrameLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         TLog.d("DrawSpeedView-dispatchDraw:" + ApmUtil.getRealTime());
-        StartupSdk.getInstance().onPageDrawEnd(this.pageKey);
+        StartUpTrace.getInstance().onPageDrawEnd(this.pageKey);
     }
 }

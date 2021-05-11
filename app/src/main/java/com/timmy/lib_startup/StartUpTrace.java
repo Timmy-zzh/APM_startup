@@ -1,7 +1,6 @@
 package com.timmy.lib_startup;
 
 import android.os.SystemClock;
-import android.util.Log;
 import android.util.SparseArray;
 
 /**
@@ -15,25 +14,27 @@ import android.util.SparseArray;
  * <p>
  * // 返回系统启动到现在的毫秒数，包含休眠时间。
  * SystemClock.elapsedRealtime();
+ * <p>
+ * 3。TODO ：获取各种启动耗时，并将数据上传到后台
  */
-public class StartupSdk {
+public class StartUpTrace {
 
-    private static volatile StartupSdk mInstance;
+    private static volatile StartUpTrace mInstance;
     private long codeStartTime;
     private SparseArray<PageBean> activityPages;
 
-    public static StartupSdk getInstance() {
+    public static StartUpTrace getInstance() {
         if (mInstance == null) {
-            synchronized (StartupSdk.class) {
+            synchronized (StartUpTrace.class) {
                 if (mInstance == null) {
-                    mInstance = new StartupSdk();
+                    mInstance = new StartUpTrace();
                 }
             }
         }
         return mInstance;
     }
 
-    public StartupSdk() {
+    public StartUpTrace() {
         activityPages = new SparseArray<>();
     }
 
@@ -54,18 +55,19 @@ public class StartupSdk {
      * -以该页面对象的hasncode为key值，创建耗时统计封装类
      */
     public void onPageCreate(Object page) {
-        int pageKey= ApmUtil.getPageKey(page);
+        int pageKey = ApmUtil.getPageKey(page);
         //判断配置项中是否需要测速该页面
         PageBean pageBean = activityPages.get(pageKey);
-        if (pageBean==null){
+        if (pageBean == null) {
             pageBean = new PageBean();
             pageBean.onCreate();
-            activityPages.put(pageKey,pageBean);
+            activityPages.put(pageKey, pageBean);
         }
     }
 
     /**
      * 根据key，找到给页面的PageBean，并设置绘制结束时间
+     *
      * @param pageKey
      */
     public void onPageDrawEnd(int pageKey) {

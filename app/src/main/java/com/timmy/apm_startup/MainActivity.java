@@ -5,15 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.util.Log;
 
 import com.timmy.lib_startup.ApmUtil;
 import com.timmy.lib_startup.DrawSpeedView;
-import com.timmy.lib_startup.StartupSdk;
+import com.timmy.lib_startup.StartUpTrace;
 import com.timmy.lib_startup.TLog;
+
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Android启动优化项目
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StartupSdk.getInstance().onPageCreate(this);
+        StartUpTrace.getInstance().onPageCreate(this);
         super.onCreate(savedInstanceState);
         long startTime = SystemClock.elapsedRealtime();
         TLog.d("MainActivity onCreate before: " + startTime);
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 //                test();
 //            }
 //        }, 2000);
+
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+
     }
 
     private void test() {

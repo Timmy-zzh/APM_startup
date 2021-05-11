@@ -3,9 +3,8 @@ package com.timmy.apm_startup;
 import android.app.Application;
 import android.content.Context;
 import android.os.SystemClock;
-import android.util.Log;
 
-import com.timmy.lib_startup.StartupSdk;
+import com.timmy.lib_startup.StartUpTrace;
 import com.timmy.lib_startup.TLog;
 
 public class MyApplication extends Application {
@@ -39,7 +38,7 @@ public class MyApplication extends Application {
             e.printStackTrace();
         }
         TLog.d("MyApplication onCreate:" + SystemClock.elapsedRealtime());
-        StartupSdk.getInstance().init(codeStartTime);
+        StartUpTrace.getInstance().init(codeStartTime);
     }
 
 }
