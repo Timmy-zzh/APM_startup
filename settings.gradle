@@ -1,3 +1,5 @@
+include ':launchTrace'
+include ':startFast'
 include ':javaLib'
 include ':app'
 rootProject.name = "APM_startup"

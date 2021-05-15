@@ -1,7 +1,7 @@
 package com.timmy.apm_startup;
 
 
-import com.timmy.lib_startup.TLog;
+import com.timmy.launchtrace.TLog;
 
 public class Util {
 

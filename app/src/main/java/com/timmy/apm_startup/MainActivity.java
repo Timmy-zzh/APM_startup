@@ -9,10 +9,11 @@ import android.os.SystemClock;
 import android.os.Trace;
 import android.util.Log;
 
-import com.timmy.lib_startup.ApmUtil;
-import com.timmy.lib_startup.DrawSpeedView;
-import com.timmy.lib_startup.StartUpTrace;
-import com.timmy.lib_startup.TLog;
+
+import com.timmy.launchtrace.DrawSpeedView;
+import com.timmy.launchtrace.LaunchTrace;
+import com.timmy.launchtrace.LaunchUtil;
+import com.timmy.launchtrace.TLog;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -23,12 +24,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StartUpTrace.getInstance().onPageCreate(this);
+        LaunchTrace.getInstance().onPageCreate(this);
         super.onCreate(savedInstanceState);
         long startTime = SystemClock.elapsedRealtime();
         TLog.d("MainActivity onCreate before: " + startTime);
 //        setContentView(R.layout.activity_main);
-        setContentView(DrawSpeedView.wrap(this, ApmUtil.getPageKey(this), R.layout.activity_main));
+        setContentView(DrawSpeedView.wrap(this, LaunchUtil.getPageKey(this), R.layout.activity_main));
         TLog.d("MainActivity onCreate after: " + SystemClock.elapsedRealtime());
         TLog.d("MainActivity onCreate diff: " + (SystemClock.elapsedRealtime() - startTime));
 
@@ -38,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
 //                test();
 //            }
 //        }, 2000);
-
-        CountDownLatch countDownLatch = new CountDownLatch(2);
-
     }
 
     private void test() {

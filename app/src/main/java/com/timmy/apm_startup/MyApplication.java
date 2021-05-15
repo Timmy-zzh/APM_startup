@@ -3,9 +3,11 @@ package com.timmy.apm_startup;
 import android.app.Application;
 import android.content.Context;
 import android.os.SystemClock;
+import android.os.Trace;
 
-import com.timmy.lib_startup.StartUpTrace;
-import com.timmy.lib_startup.TLog;
+import com.timmy.launchtrace.LaunchTrace;
+import com.timmy.launchtrace.TLog;
+
 
 public class MyApplication extends Application {
 
@@ -14,7 +16,6 @@ public class MyApplication extends Application {
     public MyApplication() {
         // 返回系统启动到现在的毫秒数，包含休眠时间。
         this.codeStartTime = SystemClock.elapsedRealtime();
-
         TLog.d("MyApplication init:" + codeStartTime);
     }
 
@@ -27,18 +28,46 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        init();
+        Trace.beginSection("applicaiton start");
+        tastA();
+        tastB();
+        tastC();
+        tastD();
+        Trace.endSection();
+        TLog.d("MyApplication onCreate:" + SystemClock.elapsedRealtime());
+        LaunchTrace.getInstance().init(codeStartTime);
     }
 
-    private void init() {
-        //模拟各种sdk的初始化
+    private void tastA() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        TLog.d("MyApplication onCreate:" + SystemClock.elapsedRealtime());
-        StartUpTrace.getInstance().init(codeStartTime);
+    }
+
+    private void tastB() {
+        try {
+            Thread.sleep(1050);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tastC() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tastD() {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

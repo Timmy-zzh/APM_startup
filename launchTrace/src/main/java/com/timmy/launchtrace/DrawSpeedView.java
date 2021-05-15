@@ -1,4 +1,4 @@
-package com.timmy.lib_startup;
+package com.timmy.launchtrace;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -31,7 +31,7 @@ public class DrawSpeedView extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        TLog.d("DrawSpeedView-dispatchDraw:" + ApmUtil.getRealTime());
-        StartUpTrace.getInstance().onPageDrawEnd(this.pageKey);
+        TLog.d("DrawSpeedView-dispatchDraw:" + LaunchUtil.getRealTime());
+        LaunchTrace.getInstance().onPageDrawEnd(this.pageKey);
     }
 }

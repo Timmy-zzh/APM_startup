@@ -1,4 +1,4 @@
-package com.timmy.lib_startup;
+package com.timmy.launchtrace;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.timmy.apm_startup.BuildConfig;
 
 import java.util.Arrays;
 
@@ -16,7 +15,8 @@ public class TLog {
     private static final String TAG_DEFAULT = ">>StartUp<<";
     private static final int MSG_MAX_LENGTH = 4000;
     public static boolean isShowThread = false;
-    public static boolean logEnable = BuildConfig.DEBUG;
+    //    public static boolean logEnable = BuildConfig.DEBUG;
+    public static boolean logEnable = true;
     private static final char HORIZONTAL_LINE = '│';
 
     private static final int MIN_STACK_OFFSET = 2;

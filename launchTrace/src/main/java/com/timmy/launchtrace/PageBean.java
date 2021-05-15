@@ -1,6 +1,4 @@
-package com.timmy.lib_startup;
-
-import android.util.Log;
+package com.timmy.launchtrace;
 
 /**
  * 该类封装了每个页面测速的功能
@@ -20,7 +18,7 @@ public class PageBean {
         if (createTime > 0) {
             return;
         }
-        this.createTime = ApmUtil.getRealTime();
+        this.createTime = LaunchUtil.getRealTime();
         //todo 是那个页面，每个页面都有对应的唯一key值
         TLog.d("页面创建时间：" + createTime);
     }
@@ -29,7 +27,7 @@ public class PageBean {
         if (drawEndTime > 0) {
             return;
         }
-        this.drawEndTime = ApmUtil.getRealTime();
+        this.drawEndTime = LaunchUtil.getRealTime();
         TLog.d("绘制结束时间：" + drawEndTime);
         TLog.d("绘制耗时：" + (drawEndTime - createTime));
 

@@ -1,8 +1,8 @@
-package com.timmy.lib_startup;
+package com.timmy.launchtrace;
 
 import android.os.SystemClock;
 
-public class ApmUtil {
+public class LaunchUtil {
 
 
     public static int getPageKey(Object page) {
