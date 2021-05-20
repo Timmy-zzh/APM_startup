@@ -5,8 +5,14 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.os.Trace;
 
+import com.timmy.apm_startup.starttask.TaskA;
+import com.timmy.apm_startup.starttask.TaskB;
+import com.timmy.apm_startup.starttask.TaskC;
+import com.timmy.apm_startup.starttask.TaskD;
+import com.timmy.apm_startup.starttask.TaskE;
 import com.timmy.launchtrace.LaunchTrace;
 import com.timmy.launchtrace.TLog;
+import com.timmy.startfast.AppStartFaster;
 
 
 public class MyApplication extends Application {
@@ -33,9 +39,21 @@ public class MyApplication extends Application {
         tastB();
         tastC();
         tastD();
+        tastE();
         Trace.endSection();
         TLog.d("MyApplication onCreate:" + SystemClock.elapsedRealtime());
         LaunchTrace.getInstance().init(codeStartTime);
+
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        AppStartFaster.getInstance()
+                .addTask(new TaskA())
+                .addTask(new TaskB())
+                .addTask(new TaskC())
+                .addTask(new TaskD())
+                .addTask(new TaskE())
+                .onStart()
+                .onWait();
+        TLog.d("all task finish:" + (SystemClock.elapsedRealtime() - elapsedRealtime));
     }
 
     private void tastA() {
@@ -48,7 +66,7 @@ public class MyApplication extends Application {
 
     private void tastB() {
         try {
-            Thread.sleep(1050);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,7 +74,7 @@ public class MyApplication extends Application {
 
     private void tastC() {
         try {
-            Thread.sleep(500);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -64,7 +82,15 @@ public class MyApplication extends Application {
 
     private void tastD() {
         try {
-            Thread.sleep(200);
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tastE() {
+        try {
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

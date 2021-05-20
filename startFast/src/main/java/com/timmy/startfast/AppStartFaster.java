@@ -1,9 +1,17 @@
 package com.timmy.startfast;
 
+import android.os.SystemClock;
+
+import com.timmy.startfast.runnable.AppStartRunnable;
 import com.timmy.startfast.task.AppStartTask;
+import com.timmy.startfast.topo.SortUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 应用冷启动优化框架：
@@ -28,6 +36,12 @@ public class AppStartFaster {
     private static volatile AppStartFaster mInstance;
     //保存所有需要执行的任务
     private List<AppStartTask> allExecutorTask;
+    // Class 与 AppStartTask的关系
+    Map<Class<? extends AppStartTask>, AppStartTask> classTaskMap = new HashMap<>();
+    //临街表
+    Map<Class<? extends AppStartTask>, List<Class<? extends AppStartTask>>> adj = new HashMap<>();
+    private long startTime;
+    private CountDownLatch mainThreadDownLatch;
 
 
     //1。单例模式
@@ -56,9 +70,23 @@ public class AppStartFaster {
      * 1。将所有任务根据依赖关系进行拓扑排序
      * 2。分发--将所有需要在子线程中执行的任务，放在线程池中进行执行
      */
-    public AppStartFaster start() {
+    public AppStartFaster onStart() {
+        startTime = SystemClock.elapsedRealtime();
         //根据原始任务队列，获取拓扑关系
+        List<? extends AppStartTask> appStartTasks = SortUtil.topoSort(allExecutorTask, classTaskMap, adj);
+        //找到需要在主线程执行的任务个数，然后每当一个任务执行完成后，CountDownLatch执行countDown方法
+        mainThreadDownLatch = new CountDownLatch(1);
 
+        //任务分发
+        for (AppStartTask appStartTask : appStartTasks) {
+            if (appStartTask.isRunOnMainThread()) {
+                //普通方法
+                new AppStartRunnable(appStartTask, this).run();
+            } else {
+                //交给线程池去调度
+                appStartTask.executorOn().execute(new AppStartRunnable(appStartTask, this));
+            }
+        }
         return this;
     }
 
@@ -66,10 +94,27 @@ public class AppStartFaster {
      * 通知该任务startTask的子节点任务，阻塞计数器减少
      */
     public void notifyChildNode(AppStartTask startTask) {
-        //
+        List<Class<? extends AppStartTask>> depends = adj.get(startTask.getClass());
+        //下层节点任务计数器减少
+        for (Class<? extends AppStartTask> depend : depends) {
+            classTaskMap.get(depend).onNotify();
+        }
     }
 
     public void taskFinish(AppStartTask startTask) {
-        
+        TLog.d("执行完成：" + startTask.getClass().getSimpleName() + " diff:" + (SystemClock.elapsedRealtime() - startTime));
+        if (startTask.isRunOnMainThread()) {
+            mainThreadDownLatch.countDown();
+        }
+    }
+
+    public void onWait() {
+        try {
+            if (mainThreadDownLatch != null) {
+                mainThreadDownLatch.await(1000, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

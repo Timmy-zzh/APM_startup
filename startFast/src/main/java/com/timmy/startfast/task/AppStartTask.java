@@ -21,7 +21,7 @@ public abstract class AppStartTask implements ITaskInterface {
 
     private CountDownLatch countDownLatch = new CountDownLatch(dependsOn() == null ? 0 : dependsOn().size());
 
-    public void aWait() {
+    public void onWait() {
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
@@ -34,7 +34,7 @@ public abstract class AppStartTask implements ITaskInterface {
      */
     public abstract void run();
 
-    public void aNotify() {
+    public void onNotify() {
         countDownLatch.countDown();
     }
 

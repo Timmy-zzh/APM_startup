@@ -25,7 +25,7 @@ public class AppStartRunnable implements Runnable {
     @Override
     public void run() {
         Process.setThreadPriority(startTask.priority());
-        startTask.aWait();
+        startTask.onWait();
         startTask.run();
         appStartFaster.notifyChildNode(startTask);
         //告诉框架当前任务完成了，主线程阻塞计数器减少

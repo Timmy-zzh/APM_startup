@@ -2,17 +2,21 @@ package com.timmy.apm_startup.starttask;
 
 import com.timmy.startfast.task.AppStartTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A 任务在主线程中执行，
- * 并且没有生层节点任务依赖
+ * B，C任务执行完，才能执行D任务
  */
-public class TaskA extends AppStartTask {
+public class TaskD extends AppStartTask {
 
     @Override
     public List<Class<? extends AppStartTask>> dependsOn() {
-        return super.dependsOn();
+        List<Class<? extends AppStartTask>> dependsList = new ArrayList<>();
+        dependsList.add(TaskC.class);
+        dependsList.add(TaskB.class);
+//        dependsList.add(TaskE.class);
+        return dependsList;
     }
 
     @Override
@@ -26,6 +30,6 @@ public class TaskA extends AppStartTask {
 
     @Override
     public boolean isRunOnMainThread() {
-        return true;
+        return false;
     }
 }
